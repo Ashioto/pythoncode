@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+	
+
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=8">
+	<meta http-equiv="Expires" content="0">
+	<meta http-equiv="Pragma" content="no-cache">
+	<meta http-equiv="Cache-control" content="no-cache">
+	<meta http-equiv="Cache" content="no-cache">
+
+
+</head>
+<title>
+	Baidu Map
+</title>
+<body>
+	<div id="Number"></div>
+	<div id="Plane"></div>
+</body>
+<script type="text/javascript">
+
+
+
+
+	function Plane(Time,Hex,Mode,Squawk,Flight,Altitude,Speed,Heading,Latitude,Longtitute)
+	{
+	this.Time=Time;
+	this.Hex=Hex;
+	this.Mode=Mode;
+	this.Squawk=Squawk;
+	this.Flight=Flight;	
+	this.Altitude=Altitude;	
+	this.Speed=Speed;	
+	this.Heading=Heading;	
+	this.Latitude=Latitude;	
+	this.Longtitute=Longtitute;	
+	}
+
+
+
+
+	function refresh(){
+		if (window.XMLHttpRequest)
+		  {// code for IE7+, Firefox, Chrome, Opera, Safari
+		  xmlhttp=new XMLHttpRequest();
+		  }
+		else
+		  {// code for IE6, IE5
+		  xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+		  }
+
+		tmpstr="currentData.xml?token="+Math.random();
+		xmlhttp.open("GET",tmpstr,false);
+		xmlhttp.send();
+		xmlDoc=xmlhttp.responseXML;
+		if(xmlDoc.getElementsByTagName("Number")[0]==undefined){
+			return
+		}
+		var num=xmlDoc.getElementsByTagName("Number")[0].childNodes[0].nodeValue;
+		planeList=new Array();
+		for(i=0;i<num;i++){
+			Time=xmlDoc.getElementsByTagName("Time")[i].childNodes[0]==undefined?'':xmlDoc.getElementsByTagName("Time")[i].childNodes[0].nodeValue;
+			Hex=xmlDoc.getElementsByTagName("Hex")[i].childNodes[0]==undefined?'':xmlDoc.getElementsByTagName("Hex")[i].childNodes[0].nodeValue;
+			Mode=xmlDoc.getElementsByTagName("Mode")[i].childNodes[0]==undefined?'':xmlDoc.getElementsByTagName("Mode")[i].childNodes[0].nodeValue;
+			Squawk=xmlDoc.getElementsByTagName("Squawk")[i].childNodes[0]==undefined?'':xmlDoc.getElementsByTagName("Squawk")[i].childNodes[0].nodeValue;
+			Flight=xmlDoc.getElementsByTagName("Flight")[i].childNodes[0]==undefined?'':xmlDoc.getElementsByTagName("Flight")[i].childNodes[0].nodeValue;
+			Altitude=xmlDoc.getElementsByTagName("Altitude")[i].childNodes[0]==undefined?'':xmlDoc.getElementsByTagName("Altitude")[i].childNodes[0].nodeValue;
+			Speed=xmlDoc.getElementsByTagName("Speed")[i].childNodes[0]==undefined?'':xmlDoc.getElementsByTagName("Speed")[i].childNodes[0].nodeValue;
+			Heading=xmlDoc.getElementsByTagName("Heading")[i].childNodes[0]==undefined?'':xmlDoc.getElementsByTagName("Heading")[i].childNodes[0].nodeValue;
+			Latitude=xmlDoc.getElementsByTagName("Latitude")[i].childNodes[0]==undefined?'':xmlDoc.getElementsByTagName("Latitude")[i].childNodes[0].nodeValue;
+			Longtitute=xmlDoc.getElementsByTagName("Longtitute")[i].childNodes[0]==undefined?'':xmlDoc.getElementsByTagName("Longtitute")[i].childNodes[0].nodeValue;
+			planeList[i]=new Plane(Time,Hex,Mode,Squawk,Flight,Altitude,Speed,Heading,Latitude,Longtitute);
+		}
+
+
+
+
+
+
+
+
+		document.getElementById("Plane").innerHTML=planeList[0].Time;
+//		setTimeout(refresh,1000);
+	}
+//	setTimeout(refresh,1000);
+	setInterval(refresh,1000);
+</script>
+</html>
+
+

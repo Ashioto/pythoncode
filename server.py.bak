@@ -1,0 +1,42 @@
+#!/bin/usr/env python
+#server.py
+
+import socket, traceback, os, sys, time
+from threading import *
+
+host=''
+port=51234
+glb_data=[]
+glb_client=[]
+
+def handlechild(clientsock):
+	print 'New child', currentThread().getName()
+	print 'Got connection from', clientsock.getpeername()
+	while 1:
+		data = clientsock.recv(4096)
+		if not len(data):
+			break
+		clientsock.sendall(data)
+
+	clientsock.close()
+	
+# Set up a socket
+s=socket.socket(AF_INET,STREAM)
+s.bind((host,port))
+s.listen(3)
+
+while 1:
+	try:
+		clientsock, clientaddr=s.accept()
+	except KeyboardInterrupt:
+		raise
+	except:
+		continue
+
+	# Save its information
+	glb_client.append(clientsock.getpeername())
+	glb_data.append('')
+	# Start a new thread to handle it
+	t=Thread(target=handlechild, args=[clientsock], name=clientsock.getpeername())
+	t.setDaemon(1)
+	t.start()	
